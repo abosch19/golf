@@ -13,7 +13,7 @@ function App() {
 				if (error) {
 					console.error(error);
 				} else {
-					setCourses((data as Course[]) ?? []);
+					setCourses(data as Course[]);
 				}
 			});
 	}, []);
