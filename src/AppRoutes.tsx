@@ -1,10 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import App from "./App";
-import PrivateLayout from "./user/layout/PrivateLayout";
-import PublicLayout from "./user/layout/PublicLayout";
-import { AuthCallback } from "./user/pages/AuthCallback";
-import { LoginPage } from "./user/pages/LoginPage";
-import { LogoutPage } from "./user/pages/LogoutPage";
+import PrivateLayout from "./modules/user/layout/PrivateLayout";
+import PublicLayout from "./modules/user/layout/PublicLayout";
+import { AuthCallback } from "./modules/user/pages/AuthCallback";
+import { LoginPage } from "./modules/user/pages/LoginPage";
+import { LogoutPage } from "./modules/user/pages/LogoutPage";
 import { Paths } from "./utils/paths";
 
 export function AppRoutes() {

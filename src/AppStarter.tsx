@@ -1,10 +1,14 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import { AppRoutes } from "./AppRoutes";
-import { UserProvider } from "./user/context/UserContext";
+import { UserProvider } from "./modules/user/context/UserContext";
+import { queryClient } from "./utils/queryClient";
 
 export function AppStarter() {
 	return (
-		<UserProvider>
-			<AppRoutes />
-		</UserProvider>
+		<QueryClientProvider client={queryClient}>
+			<UserProvider>
+				<AppRoutes />
+			</UserProvider>
+		</QueryClientProvider>
 	);
 }
