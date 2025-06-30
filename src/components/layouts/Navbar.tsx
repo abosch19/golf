@@ -46,7 +46,7 @@ export function Navbar() {
 								to={PathsBuilder.home()}
 								className="text-xl font-bold text-green-600"
 							>
-								Golf Tracker
+								<img src="/images/logo.png" alt="BirdieClub" className="h-8" />
 							</Link>
 						</div>
 
