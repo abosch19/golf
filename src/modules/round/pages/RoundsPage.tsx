@@ -140,15 +140,17 @@ export function RoundsPage() {
 												</div>
 												<div className="text-right">
 													<p className="text-sm text-gray-500">Total Strokes</p>
-													<p className="text-2xl font-bold text-green-600">
-														<span className="text-sm text-gray-500 mr-2">
+													<div className="flex items-center justify-end">
+														<p className="text-sm text-gray-500 mr-2">
 															{calculateOverParSum(
 																round.course.par,
 																score.gross_score,
 															)}
-														</span>
-														{score.gross_score}
-													</p>
+														</p>
+														<p className="text-2xl font-bold text-green-600">
+															{score.gross_score}
+														</p>
+													</div>
 												</div>
 											</div>
 
