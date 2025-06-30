@@ -3,6 +3,7 @@ export enum Paths {
 	LOGIN = "/login",
 	LOGOUT = "/logout",
 	PLAYERS = "/players",
+	ROUNDS = "/rounds",
 	AUTH_CALLBACK = "/auth/callback",
 }
 
@@ -12,5 +13,6 @@ export const PathsBuilder = {
 	logout: () => Paths.LOGOUT,
 	authCallback: () => Paths.AUTH_CALLBACK,
 	players: () => Paths.PLAYERS,
+	round: (roundId: string) => `${Paths.ROUNDS}/${roundId}`,
 	player: (playerId: string) => `${Paths.PLAYERS}/${playerId}`,
 };
