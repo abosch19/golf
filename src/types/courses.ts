@@ -1,6 +1,7 @@
 interface Course {
 	id: string;
 	name: string;
+	par: number;
 	picture_url: string;
 	course_holes: CourseHole[];
 }

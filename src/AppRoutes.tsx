@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
-import App from "./App";
+import { RoundsPage } from "./modules/round/pages/RoundsPage";
 import PrivateLayout from "./modules/user/layout/PrivateLayout";
 import PublicLayout from "./modules/user/layout/PublicLayout";
 import { AuthCallback } from "./modules/user/pages/AuthCallback";
@@ -12,7 +12,7 @@ export function AppRoutes() {
 		<BrowserRouter>
 			<Routes>
 				<Route element={<PrivateLayout />}>
-					<Route path={Paths.HOME} element={<App />} />
+					<Route path={Paths.HOME} element={<RoundsPage />} />
 					<Route path={Paths.LOGOUT} element={<LogoutPage />} />
 				</Route>
 				<Route element={<PublicLayout />}>
