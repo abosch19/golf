@@ -38,7 +38,7 @@ export function PlayerPage() {
 	const stats = calculatePlayerStats();
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
+		<div className="flex-1 bg-gradient-to-br from-green-50 to-blue-50 p-6">
 			<div className="max-w-6xl mx-auto">
 				{/* Player Header */}
 				<div className="mb-8">

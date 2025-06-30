@@ -10,7 +10,8 @@ export function useRounds() {
 				.from("rounds")
 				.select(
 					"*, round_scores(*, player:players(*), holes:round_score_holes(*, course_hole:course_holes(*))), course:courses(*)",
-				);
+				)
+				.order("played_at", { ascending: true });
 			if (error) throw error;
 			return data as Round[];
 		},
