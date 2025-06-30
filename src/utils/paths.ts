@@ -11,5 +11,6 @@ export const PathsBuilder = {
 	login: () => Paths.LOGIN,
 	logout: () => Paths.LOGOUT,
 	authCallback: () => Paths.AUTH_CALLBACK,
+	players: () => Paths.PLAYERS,
 	player: (playerId: string) => `${Paths.PLAYERS}/${playerId}`,
 };

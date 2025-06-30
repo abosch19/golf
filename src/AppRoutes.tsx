@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { PlayerPage } from "./modules/player/pages/PlayerPage";
+import { PlayersPage } from "./modules/player/pages/PlayersPage";
 import { RoundsPage } from "./modules/round/pages/RoundsPage";
 import PrivateLayout from "./modules/user/layout/PrivateLayout";
 import PublicLayout from "./modules/user/layout/PublicLayout";
@@ -18,6 +19,7 @@ export function AppRoutes() {
 						path={PathsBuilder.player(":playerId")}
 						element={<PlayerPage />}
 					/>
+					<Route path={PathsBuilder.players()} element={<PlayersPage />} />
 					<Route path={PathsBuilder.logout()} element={<LogoutPage />} />
 				</Route>
 				<Route element={<PublicLayout />}>
