@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePlayerContext } from "./modules/player/context/PlayerContext";
-import type { Course } from "./types/courses";
+import type { Course, CourseHole } from "./types/courses";
 import supabase from "./utils/supabase";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
 	useEffect(() => {
 		supabase
 			.from("courses")
-			.select("*")
+			.select("*, course_holes(*)")
 			.then(({ data, error }) => {
 				if (error) {
 					console.error(error);
@@ -35,6 +35,15 @@ function App() {
 						height={100}
 						alt={course.name}
 					/>
+					<h2>Holes</h2>
+					{course.course_holes.map((hole: CourseHole) => (
+						<div key={`${hole.course_id}-${hole.hole_number}`}>
+							<h3>
+								{hole.hole_number} - {hole.par} - {hole.stroke_index} -{" "}
+								{hole.distance}
+							</h3>
+						</div>
+					))}
 				</div>
 			))}
 		</>
