@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import type { CourseHole } from "@/types/courses";
-import type { RoundScoreHole } from "@/types/rounds";
 import {
 	Card,
 	CardContent,
