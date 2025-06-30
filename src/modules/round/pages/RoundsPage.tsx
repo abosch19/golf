@@ -1,4 +1,8 @@
+import { Plus } from "lucide-react";
+import { Link } from "react-router";
 import { Loading } from "@/components/layouts/Loading";
+import { Button } from "@/components/ui/button";
+import { RouteBuilder } from "@/utils/paths";
 import { NoRoundsAvailable } from "../components/NoRoundsAvailable";
 import { RoundCard } from "../components/RoundCard";
 import { useRounds } from "../hooks/useRounds";
@@ -36,6 +40,14 @@ export function RoundsPage() {
 				</div>
 
 				{roundsQuery.data.length === 0 && <NoRoundsAvailable />}
+			</div>
+			<div className="fixed bottom-10 right-10">
+				<Button asChild>
+					<Link to={RouteBuilder.roundAdd()}>
+						<Plus className="w-6 h-6" />
+						<p className="hidden md:block">Add Round</p>
+					</Link>
+				</Button>
 			</div>
 		</div>
 	);

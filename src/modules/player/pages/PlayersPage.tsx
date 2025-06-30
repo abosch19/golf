@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Player } from "@/types/player";
 import type { RoundScore } from "@/types/rounds";
-import { PathsBuilder } from "@/utils/paths";
+import { RouteBuilder } from "@/utils/paths";
 import { usePlayers } from "../hooks/usePlayers";
 
 // Type for player object returned from the query
@@ -87,7 +87,7 @@ export function PlayersPage() {
 
 				<div className="flex flex-col gap-3">
 					{sortedPlayers.map((player: any) => (
-						<Link key={player.id} to={PathsBuilder.player(player.id)}>
+						<Link key={player.id} to={RouteBuilder.player(player.id)}>
 							<Card className="hover:shadow-lg transition-shadow px-3 text-sm bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/50">
 								<CardHeader>
 									<div className="flex items-start justify-between gap-2">

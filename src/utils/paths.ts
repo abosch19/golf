@@ -4,15 +4,15 @@ export enum Paths {
 	LOGOUT = "/logout",
 	PLAYERS = "/players",
 	ROUNDS = "/rounds",
-	AUTH_CALLBACK = "/auth/callback",
+	ROUNDS_ADD = "/rounds/add",
 }
 
-export const PathsBuilder = {
+export const RouteBuilder = {
 	home: () => Paths.HOME,
 	login: () => Paths.LOGIN,
 	logout: () => Paths.LOGOUT,
-	authCallback: () => Paths.AUTH_CALLBACK,
 	players: () => Paths.PLAYERS,
 	round: (roundId: string) => `${Paths.ROUNDS}/${roundId}`,
+	roundAdd: () => Paths.ROUNDS_ADD,
 	player: (playerId: string) => `${Paths.PLAYERS}/${playerId}`,
 };

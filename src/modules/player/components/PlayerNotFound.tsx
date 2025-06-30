@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { PathsBuilder } from "@/utils/paths";
+import { RouteBuilder } from "@/utils/paths";
 
 export function PlayerNotFound() {
 	return (
@@ -44,7 +44,7 @@ export function PlayerNotFound() {
 							asChild
 							className="w-full bg-green-600 hover:bg-green-700 text-white"
 						>
-							<Link to={PathsBuilder.home()}>
+							<Link to={RouteBuilder.home()}>
 								<svg
 									className="w-4 h-4 mr-2"
 									fill="none"

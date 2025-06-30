@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { useUser } from "@/modules/user/context/UserContext";
-import { PathsBuilder } from "@/utils/paths";
+import { RouteBuilder } from "@/utils/paths";
+import { Button } from "../ui/button";
 
 export function Navbar() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -25,25 +26,25 @@ export function Navbar() {
 	const navigation = [
 		{
 			name: "Rounds",
-			href: PathsBuilder.home(),
-			current: location.pathname === PathsBuilder.home(),
+			href: RouteBuilder.home(),
+			current: location.pathname === RouteBuilder.home(),
 		},
 		{
 			name: "Players",
-			href: PathsBuilder.player(""),
+			href: RouteBuilder.player(""),
 			current: location.pathname.startsWith("/players"),
 		},
 	];
 
 	return (
-		<nav className="bg-white shadow-sm">
+		<nav className="sticky top-0 z-50 backdrop-blur-2xl shadow-sm">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex justify-between h-16">
 					{/* Logo and Desktop Navigation */}
 					<div className="flex items-center">
 						<div className="flex-shrink-0 flex items-center">
 							<Link
-								to={PathsBuilder.home()}
+								to={RouteBuilder.home()}
 								className="text-xl font-bold text-green-600"
 							>
 								<img src="/images/logo.png" alt="BirdieClub" className="h-8" />
@@ -75,12 +76,12 @@ export function Navbar() {
 							<div className="ml-3 relative">
 								<div className="flex items-center space-x-3">
 									<span className="text-sm text-gray-700">{user?.email}</span>
-									<Link
-										to={PathsBuilder.logout()}
-										className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+									<Button
+										asChild
+										className=" text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
 									>
-										Logout
-									</Link>
+										<Link to={RouteBuilder.logout()}>Logout</Link>
+									</Button>
 								</div>
 							</div>
 						</div>
@@ -132,7 +133,7 @@ export function Navbar() {
 
 			{/* Mobile menu */}
 			<div
-				className={`${isMobileMenuOpen ? "block" : "hidden"} md:hidden absolute top-0 left-0 w-full h-full z-10 bg-white`}
+				className={`${isMobileMenuOpen ? "block" : "hidden"} md:hidden absolute top-0 left-0 w-full h-full z-[9999] bg-white`}
 			>
 				<div className="flex justify-between items-center px-4 py-3 border-b border-gray-200">
 					<h2 className="text-lg font-medium text-gray-900">Menu</h2>
@@ -194,7 +195,7 @@ export function Navbar() {
 					</div>
 					<div className="mt-3 space-y-1">
 						<Link
-							to={PathsBuilder.logout()}
+							to={RouteBuilder.logout()}
 							className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
 							onClick={() => setIsMobileMenuOpen(false)}
 						>
