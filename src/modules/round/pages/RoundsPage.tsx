@@ -1,3 +1,4 @@
+import { Loading } from "@/components/layouts/Loading";
 import { Badge } from "@/components/ui/badge";
 import type { CourseHole } from "@/types/courses";
 import {
@@ -12,11 +13,7 @@ export function RoundsPage() {
 	const roundsQuery = useRounds();
 
 	if (roundsQuery.isLoading) {
-		return (
-			<div className="flex items-center justify-center min-h-screen">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-			</div>
-		);
+		return <Loading />;
 	}
 
 	if (roundsQuery.error || !roundsQuery.data) {
@@ -158,7 +155,10 @@ export function RoundsPage() {
 											{/* Hole-by-hole breakdown */}
 											<div className="grid grid-cols-9 gap-1 mt-3">
 												{score.holes.slice(0, 9).map((hole) => (
-													<div key={hole.id} className="text-center">
+													<div
+														key={score.id + hole.hole_number}
+														className="text-center"
+													>
 														<div className="text-xs text-gray-500">
 															Hole {hole.hole_number}
 														</div>
@@ -175,7 +175,10 @@ export function RoundsPage() {
 											{score.holes.length > 9 && (
 												<div className="grid grid-cols-9 gap-1 mt-2">
 													{score.holes.slice(9, 18).map((hole) => (
-														<div key={hole.id} className="text-center">
+														<div
+															key={score.id + hole.hole_number}
+															className="text-center"
+														>
 															<div className="text-xs text-gray-500">
 																Hole {hole.hole_number}
 															</div>

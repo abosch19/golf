@@ -2,7 +2,6 @@ import type { Course, CourseHole } from "./courses";
 import type { Player } from "./player";
 
 interface RoundScoreHole {
-	id: string;
 	round_score_id: string;
 	hole_number: number;
 	gross_score: number;
