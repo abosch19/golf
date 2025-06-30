@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { useUserContext } from "@/modules/user/context/UserContext";
+import { useUser } from "@/modules/user/context/UserContext";
 import supabase from "@/utils/supabase";
 
 export function useMe() {
-	const user = useUserContext();
+	const { user } = useUser();
 
 	return useQuery({
 		queryKey: ["player"],

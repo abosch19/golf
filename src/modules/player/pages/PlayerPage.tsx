@@ -2,8 +2,7 @@ import { useParams } from "react-router";
 import { Loading } from "@/components/layouts/Loading";
 import { Card, CardContent } from "@/components/ui/card";
 import { NoRoundsAvailable } from "@/modules/round/components/NoRoundsAvailable";
-import { RoundCard } from "@/modules/round/components/RoundCard";
-import type { Round, RoundScore } from "@/types/rounds";
+import type { RoundScore } from "@/types/rounds";
 import { PlayerNotFound } from "../components/PlayerNotFound";
 import { usePlayer } from "../hooks/usePlayer";
 
@@ -103,14 +102,13 @@ export function PlayerPage() {
 				<div className="mb-6">
 					<h2 className="text-2xl font-bold text-gray-800 mb-4">Golf Rounds</h2>
 
-					{rounds.length === 0 ? (
-						<NoRoundsAvailable />
-					) : null
-					// <div className="grid gap-6">
-					// 	{rounds.map((roundScore: Round) => (
-					// 		<RoundCard key={roundScore.id} round={roundScore} />
-					// 	))}
-					// </div>
+					{
+						rounds.length === 0 ? <NoRoundsAvailable /> : null
+						// <div className="grid gap-6">
+						// 	{rounds.map((roundScore: Round) => (
+						// 		<RoundCard key={roundScore.id} round={roundScore} />
+						// 	))}
+						// </div>
 					}
 				</div>
 			</div>

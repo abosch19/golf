@@ -1,11 +1,11 @@
 import { Link } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Course, CourseHole } from "@/types/courses";
+import type { CourseHole } from "@/types/courses";
 import type { Round } from "@/types/rounds";
 import { PathsBuilder } from "@/utils/paths";
 
-export function RoundCard({ round }: { round: Round; course: Course }) {
+export function RoundCard({ round }: { round: Round }) {
 	const formatDate = (dateString: string) => {
 		return new Date(dateString).toLocaleDateString("en-US", {
 			weekday: "long",
@@ -69,9 +69,9 @@ export function RoundCard({ round }: { round: Round; course: Course }) {
 				<div className="flex justify-between items-center">
 					<div>
 						<CardTitle className="text-2xl font-bold">
-							{/* {round.course.name} */}
+							{round.course.name}
 						</CardTitle>
-						{/* <p className="text-green-100 mt-1">{formatDate(round.played_at)}</p> */}
+						<p className="text-green-100 mt-1">{formatDate(round.played_at)}</p>
 					</div>
 					<Badge
 						variant="secondary"

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
-import { usePlayerContext } from "@/modules/player/context/PlayerContext";
 import { useUser } from "@/modules/user/context/UserContext";
 import { PathsBuilder } from "@/utils/paths";
 
