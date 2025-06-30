@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { Course, CourseHole } from "@/types/courses";
 import type { RoundScore } from "@/types/rounds";
 import { PathsBuilder } from "@/utils/paths";
+import { getPlayerColor } from "@/utils/player";
 
 interface ScoreCardProps {
 	score: RoundScore;
@@ -52,6 +53,8 @@ export function ScoreCard({ score, course }: ScoreCardProps) {
 		);
 	};
 
+	const playerColor = getPlayerColor(score.player.first_name);
+
 	return (
 		<Link
 			to={PathsBuilder.round(score.id)}
@@ -62,9 +65,9 @@ export function ScoreCard({ score, course }: ScoreCardProps) {
 				<div className="flex items-center gap-3">
 					<Link
 						to={PathsBuilder.player(score.player.id)}
-						className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"
+						className={`w-10 h-10 rounded-full flex items-center justify-center ${playerColor.bgColor}`}
 					>
-						<span className="text-green-700 font-bold text-sm">
+						<span className={`font-bold text-sm ${playerColor.textColor}`}>
 							{score.player.first_name?.charAt(0) || "P"}
 						</span>
 					</Link>

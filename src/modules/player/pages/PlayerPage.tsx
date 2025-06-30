@@ -3,6 +3,7 @@ import { Loading } from "@/components/layouts/Loading";
 import { Card, CardContent } from "@/components/ui/card";
 import { NoRoundsAvailable } from "@/modules/round/components/NoRoundsAvailable";
 import type { RoundScore } from "@/types/rounds";
+import { getPlayerColor } from "@/utils/player";
 import { PlayerNotFound } from "../components/PlayerNotFound";
 import { usePlayer } from "../hooks/usePlayer";
 
@@ -36,6 +37,7 @@ export function PlayerPage() {
 	};
 
 	const stats = calculatePlayerStats();
+	const playerColor = getPlayerColor(player.first_name);
 
 	return (
 		<div className="flex-1 bg-gradient-to-br from-green-50 to-blue-50 p-6">
@@ -43,8 +45,10 @@ export function PlayerPage() {
 				{/* Player Header */}
 				<div className="mb-8">
 					<div className="flex items-center gap-6 mb-4">
-						<div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-							<span className="text-green-700 font-bold text-2xl">
+						<div
+							className={`w-20 h-20 rounded-full flex items-center justify-center ${playerColor.bgColor}`}
+						>
+							<span className={`font-bold text-2xl ${playerColor.textColor}`}>
 								{player.first_name?.charAt(0) || "P"}
 							</span>
 						</div>
