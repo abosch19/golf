@@ -44,11 +44,11 @@ export function PlayersPage() {
 		// Get most recent round
 		const recentRound =
 			roundScores.length > 0
-				? [...roundScores].sort(
-						(a: any, b: any) =>
-							new Date(b.rounds?.date || "").getTime() -
-							new Date(a.rounds?.date || "").getTime(),
-					)[0]
+				? roundScores.reduce((latest, current) => {
+						const latestDate = new Date(latest.rounds?.date || 0).getTime();
+						const currentDate = new Date(current.rounds?.date || 0).getTime();
+						return currentDate > latestDate ? current : latest;
+					}, roundScores[0])
 				: null;
 
 		console.log(recentRound);
