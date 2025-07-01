@@ -18,7 +18,7 @@ export default defineConfig({
 				description:
 					"BirdieClub is a platform for tracking your golf scores and improving your game.",
 				theme_color: "#22c55e",
-				background_color: "#000000",
+				background_color: "#ffffff",
 				display: "standalone",
 				scope: "/",
 				start_url: "/",
