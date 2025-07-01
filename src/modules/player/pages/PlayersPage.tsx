@@ -51,8 +51,6 @@ export function PlayersPage() {
 					}, roundScores[0])
 				: null;
 
-		console.log(recentRound);
-
 		return {
 			...player,
 			stats: {
