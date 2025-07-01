@@ -251,7 +251,7 @@ export function CreateRoundPage() {
 									onChange={(e) =>
 										setFormData((prev) => ({
 											...prev,
-											playedAt: e.target.value,
+											played_at: e.target.value,
 										}))
 									}
 									required
