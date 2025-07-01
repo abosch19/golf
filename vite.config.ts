@@ -7,7 +7,21 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [react(), tailwindcss(), VitePWA({ registerType: "autoUpdate" })],
+	plugins: [
+		react(),
+		tailwindcss(),
+		VitePWA({
+			registerType: "autoUpdate",
+			manifest: {
+				name: "BirdieClub",
+				short_name: "BirdieClub",
+				description:
+					"BirdieClub is a platform for tracking your golf scores and improving your game.",
+				theme_color: "#000000",
+				icons: [],
+			},
+		}),
+	],
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
