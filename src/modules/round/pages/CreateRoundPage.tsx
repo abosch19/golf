@@ -9,7 +9,6 @@ import type { Course } from "@/types/courses";
 import type { Player } from "@/types/player";
 import { RouteBuilder } from "@/utils/paths";
 import { getPlayerColor } from "@/utils/player";
-import { usePrompt } from "@/utils/usePrompt";
 import { useAvailableCourses } from "../hooks/useAvailableCourses";
 import { useAvailablePlayers } from "../hooks/useAvailablePlayers";
 import {
