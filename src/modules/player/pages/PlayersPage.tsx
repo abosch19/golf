@@ -92,8 +92,8 @@ export function PlayersPage() {
 						<Link key={player.id} to={RouteBuilder.player(player.id)}>
 							<Card className="hover:shadow-lg transition-shadow px-3 text-sm bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 dark:border-gray-700/50">
 								<CardHeader>
-									<div className="flex items-start justify-between gap-2">
-										<div>
+									<div className="flex items-start justify-between gap-5">
+										<div className="flex-1">
 											<CardTitle className="text-base">
 												{player.first_name} {player.last_name}
 											</CardTitle>
@@ -104,7 +104,7 @@ export function PlayersPage() {
 												{player.nationality}
 											</Badge>
 										</div>
-										<div className="flex flex-1 flex-row gap-6 justify-center">
+										<div className="flex flex-3 flex-row gap-6 justify-center">
 											<div className="text-center">
 												<div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
 													{player.stats.averageScore}
@@ -152,10 +152,11 @@ export function PlayersPage() {
 												</div>
 											</div>
 										</div>
+
 										{player.stats.totalRounds > 0 && (
 											<Badge
 												variant="default"
-												className="text-xs px-1.5 py-0.5"
+												className="flex-1text-xs px-1.5 py-0.5"
 											>
 												#
 												{sortedPlayers.findIndex(
