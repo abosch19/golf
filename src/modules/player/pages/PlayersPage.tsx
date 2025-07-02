@@ -45,8 +45,12 @@ export function PlayersPage() {
 		const recentRound =
 			roundScores.length > 0
 				? roundScores.reduce((latest, current) => {
-						const latestDate = new Date(latest.rounds?.date || 0).getTime();
-						const currentDate = new Date(current.rounds?.date || 0).getTime();
+						const latestDate = new Date(
+							latest.rounds?.played_at || 0,
+						).getTime();
+						const currentDate = new Date(
+							current.rounds?.played_at || 0,
+						).getTime();
 						return currentDate > latestDate ? current : latest;
 					}, roundScores[0])
 				: null;
