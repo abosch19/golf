@@ -5,6 +5,7 @@ interface Player {
 	birthdate: string;
 	nationality: string;
 	auth_id: string;
+	p_and_p_handicap: number;
 }
 
 export type { Player };

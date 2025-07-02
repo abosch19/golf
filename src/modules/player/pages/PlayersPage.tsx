@@ -133,6 +133,20 @@ export function PlayersPage() {
 													Worst Score
 												</div>
 											</div>
+											<div className="text-center">
+												<div
+													className={`text-2xl font-semibold ${
+														player.p_and_p_handicap
+															? "text-green-600 dark:text-green-400"
+															: "text-gray-500 dark:text-gray-400"
+													}`}
+												>
+													{player.p_and_p_handicap ?? "N/A"}
+												</div>
+												<div className="text-sm text-gray-500 dark:text-gray-400">
+													Handicap
+												</div>
+											</div>
 										</div>
 										{player.stats.totalRounds > 0 && (
 											<Badge

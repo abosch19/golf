@@ -98,6 +98,20 @@ export function PlayerPage() {
 									<div className="text-sm text-gray-500">Worst Score</div>
 								</CardContent>
 							</Card>
+							<Card className="text-center">
+								<CardContent className="p-4">
+									<div
+										className={`text-2xl font-bold ${
+											player.p_and_p_handicap
+												? "text-green-600"
+												: "text-gray-500"
+										}`}
+									>
+										{player.p_and_p_handicap ?? "N/A"}
+									</div>
+									<div className="text-sm text-gray-500">Handicap</div>
+								</CardContent>
+							</Card>
 						</div>
 					)}
 				</div>
