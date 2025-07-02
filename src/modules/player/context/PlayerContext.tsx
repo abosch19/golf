@@ -7,6 +7,7 @@ export const PlayerContext = createContext<Player>({
 	last_name: "",
 	birthdate: "",
 	nationality: "",
+	p_and_p_handicap: 0,
 	auth_id: "",
 });
 
