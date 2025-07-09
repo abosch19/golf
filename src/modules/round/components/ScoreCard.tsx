@@ -60,9 +60,9 @@ export function ScoreCard({ score, course }: ScoreCardProps) {
 	const playerColor = getPlayerColor(score.player.first_name);
 
 	return (
-		<Link
-			to={RouteBuilder.round(score.id)}
+		<div
 			key={score.id}
+			data-id={score.id}
 			className="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-md transition-shadow duration-300"
 		>
 			<div className="flex justify-between items-center mb-3">
@@ -126,6 +126,6 @@ export function ScoreCard({ score, course }: ScoreCardProps) {
 					))}
 				</div>
 			)}
-		</Link>
+		</div>
 	);
 }

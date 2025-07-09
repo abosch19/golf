@@ -20,6 +20,7 @@ export function RoundCard({ round }: { round: Round }) {
 	return (
 		<Card
 			key={round.id}
+			data-id={round.id}
 			className="shadow-lg hover:shadow-xl transition-shadow duration-300 pt-0"
 		>
 			<CardHeader className="bg-gradient-to-r from-green-600 to-green-700 text-white rounded-t-lg py-2">

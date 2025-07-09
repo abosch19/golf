@@ -1,14 +1,19 @@
-import { CalendarDays, MapPin, Minus, Plus, Users } from "lucide-react";
+import { CalendarDays, MapPin, Plus, Trash } from "lucide-react";
 import { useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Loading } from "@/components/layouts/Loading";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import type { Course } from "@/types/courses";
-import type { Player } from "@/types/player";
 import { RouteBuilder } from "@/utils/paths";
-import { getPlayerColor } from "@/utils/player";
 import { useAvailableCourses } from "../hooks/useAvailableCourses";
 import { useAvailablePlayers } from "../hooks/useAvailablePlayers";
 import {
@@ -22,7 +27,9 @@ const createRoundScore = (
 	courseHoles: number,
 ) => {
 	return {
+		id: Math.random().toString(36).substr(2, 9),
 		player_id: playerId,
+		player_name: "",
 		gross_score: 0,
 		round_score_holes: [...Array(courseHoles)].map((_, index) => ({
 			hole_number: index + 1,
@@ -45,7 +52,6 @@ export function CreateRoundPage() {
 		played_at: new Date().toISOString().slice(0, 16),
 		round_scores: [],
 	});
-	const [showAllPlayers, setShowAllPlayers] = useState(false);
 
 	const timeId = useId();
 
@@ -53,46 +59,38 @@ export function CreateRoundPage() {
 		setFormData((prev) => ({ ...prev, course_id: course.id }));
 	};
 
-	const handlePlayerToggle = (playerId: string) => {
-		setFormData((prev) => {
-			const isSelected = prev.round_scores.some(
-				(rs) => rs.player_id === playerId,
-			);
+	const handleAddScore = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
 
-			if (isSelected) {
-				// Remove player and their hole scores
-				return {
-					...prev,
-					round_scores: prev.round_scores.filter(
-						(rs) => rs.player_id !== playerId,
-					),
-				};
-			} else {
-				const newRoundScore = createRoundScore(
-					playerId,
+		setFormData((prev) => ({
+			...prev,
+			round_scores: [
+				...prev.round_scores,
+				createRoundScore(
+					"",
 					formData.course_id,
 					courses?.find((c) => c.id === formData.course_id)?.course_holes
 						?.length || 0,
-				);
+				),
+			],
+		}));
+	};
 
-				return {
-					...prev,
-					round_scores: [...prev.round_scores, newRoundScore],
-				};
-			}
-		});
+	const removeScore = (scoreId: string) => {
+		setFormData((prev) => ({
+			...prev,
+			round_scores: prev.round_scores.filter((rs) => rs.id !== scoreId),
+		}));
 	};
 
 	const handleHoleScoreChange = (
-		playerId: string,
+		scoreId: string,
 		holeNumber: number,
 		score: number,
 		index: number,
 	) => {
 		setFormData((prev) => {
-			const roundScore = prev.round_scores.find(
-				(rs) => rs.player_id === playerId,
-			);
+			const roundScore = prev.round_scores.find((rs) => rs.id === scoreId);
 			if (!roundScore) return prev;
 			const holeScore = roundScore.round_score_holes.find(
 				(rsh) => rsh.hole_number === holeNumber,
@@ -109,12 +107,24 @@ export function CreateRoundPage() {
 		holesInputRef.current[index + 1]?.focus();
 	};
 
-	const getPlayerTotalScore = (playerId: string) => {
-		return (
-			formData.round_scores
-				.find((rs) => rs.player_id === playerId)
-				?.round_score_holes.reduce((sum, rsh) => sum + rsh.gross_score, 0) || 0
-		);
+	const handlePlayerSelect = (roundScoreId: string, playerId: string) => {
+		setFormData((prev) => ({
+			...prev,
+			round_scores: prev.round_scores.map((rs) =>
+				rs.id === roundScoreId
+					? {
+							...rs,
+							player_id: playerId,
+							player_name:
+								availablePlayers
+									?.find((p) => p.id === playerId)
+									?.first_name.charAt(0) +
+								"." +
+								availablePlayers?.find((p) => p.id === playerId)?.last_name,
+						}
+					: rs,
+			),
+		}));
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -167,14 +177,14 @@ export function CreateRoundPage() {
 		);
 	}
 
-	// Display only first 10 players initially, or all if showAllPlayers is true
-	const displayedPlayers = showAllPlayers
-		? availablePlayers
-		: availablePlayers.slice(0, 10);
 	const courseHoles =
 		courses
 			.find((c) => c.id === formData.course_id)
 			?.course_holes?.sort((a, b) => a.hole_number - b.hole_number) || [];
+
+	const fileterdAvailablePlayers = availablePlayers.filter(
+		(player) => !formData.round_scores.some((rs) => rs.player_id === player.id),
+	);
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
@@ -260,91 +270,8 @@ export function CreateRoundPage() {
 						</CardContent>
 					</Card>
 
-					{/* Player Selection */}
-					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
-								<Users className="w-5 h-5" />
-								Select Players ({formData.round_scores.length} selected)
-							</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-								{displayedPlayers.map((player: Player) => {
-									const isSelected = formData.round_scores.some(
-										(rs) => rs.player_id === player.id,
-									);
-									const playerColor = getPlayerColor(player.first_name);
-									const totalScore = getPlayerTotalScore(player.id);
-
-									return (
-										<button
-											key={player.id}
-											type="button"
-											disabled={!formData.course_id}
-											onClick={() => handlePlayerToggle(player.id)}
-											className={`p-4 rounded-lg border-2 text-left transition-all ${
-												isSelected
-													? "border-green-500 bg-green-50"
-													: "border-gray-200 hover:border-gray-300 bg-white"
-											}
-											${!formData.course_id ? "opacity-50 cursor-not-allowed" : ""}`}
-										>
-											<div className="flex items-center gap-3 mb-2">
-												<div
-													className={`w-10 h-10 rounded-full flex items-center justify-center ${playerColor.bgColor}`}
-												>
-													<span
-														className={`font-bold text-sm ${playerColor.textColor}`}
-													>
-														{player.first_name?.charAt(0) || "P"}
-													</span>
-												</div>
-												<div className="flex-1">
-													<p className="font-semibold text-gray-800">
-														{player.first_name} {player.last_name}
-													</p>
-													<p className="text-sm text-gray-500">
-														{player.nationality}
-													</p>
-												</div>
-											</div>
-											{isSelected && (
-												<div className="text-right">
-													<p className="text-sm text-gray-600">
-														Total: {totalScore}
-													</p>
-												</div>
-											)}
-										</button>
-									);
-								})}
-							</div>
-
-							{availablePlayers.length > 10 && (
-								<div className="mt-4 flex justify-center">
-									<Button
-										type="button"
-										variant="outline"
-										onClick={() => setShowAllPlayers(!showAllPlayers)}
-										className="flex items-center gap-2"
-									>
-										{showAllPlayers ? (
-											<Minus className="w-4 h-4" />
-										) : (
-											<Plus className="w-4 h-4" />
-										)}
-										{showAllPlayers
-											? "Show Less"
-											: `Show All ${availablePlayers.length} Players`}
-									</Button>
-								</div>
-							)}
-						</CardContent>
-					</Card>
-
 					{/* Hole-by-Hole Scoring */}
-					{formData.course_id && formData.round_scores.length > 0 && (
+					{formData.course_id && (
 						<Card>
 							<CardHeader>
 								<CardTitle>Hole-by-Hole Scoring</CardTitle>
@@ -352,58 +279,65 @@ export function CreateRoundPage() {
 							<CardContent>
 								<div className="overflow-x-auto">
 									<table className="w-full border-collapse">
-										<thead>
-											<tr className="border-b border-gray-200">
-												<th className="text-left p-2 font-semibold text-gray-700">
-													Player
-												</th>
-												{courseHoles.map((hole) => (
-													<th
-														key={hole.hole_number}
-														className="text-center p-2 font-semibold text-gray-700 min-w-16"
-													>
-														<div>H{hole.hole_number}</div>
-														<div className="text-xs text-gray-500">
-															Par {hole.par}
-														</div>
+										{formData.round_scores.length > 0 && (
+											<thead>
+												<tr className="border-b border-gray-200">
+													<th className="text-left p-2 font-semibold text-gray-700">
+														Player
 													</th>
-												))}
-												<th className="text-center p-2 font-semibold text-gray-700">
-													Total
-												</th>
-											</tr>
-										</thead>
+													{courseHoles.map((hole) => (
+														<th
+															key={hole.hole_number}
+															className="text-center p-2 font-semibold text-gray-700 min-w-16"
+														>
+															<div>H{hole.hole_number}</div>
+															<div className="text-xs text-gray-500">
+																Par {hole.par}
+															</div>
+														</th>
+													))}
+													<th className="text-center p-2 font-semibold text-gray-700">
+														Total
+													</th>
+												</tr>
+											</thead>
+										)}
 										<tbody>
 											{formData.round_scores.map((rs, index) => {
-												const player = availablePlayers.find(
-													(p) => p.id === rs.player_id,
+												const totalScore = rs.round_score_holes.reduce(
+													(sum, rsh) => sum + rsh.gross_score,
+													0,
 												);
-												if (!player) return null;
-
-												const playerColor = getPlayerColor(player.first_name);
-												const totalScore = getPlayerTotalScore(rs.player_id);
 
 												return (
-													<tr
-														key={rs.player_id}
-														className="border-b border-gray-100"
-													>
+													<tr key={rs.id} className="border-b border-gray-100">
 														<td className="p-2">
 															<div className="flex items-center gap-2">
-																<div
-																	className={`w-8 h-8 rounded-full flex items-center justify-center ${playerColor.bgColor}`}
+																<Select
+																	onValueChange={(playerId) =>
+																		handlePlayerSelect(rs.id, playerId)
+																	}
 																>
-																	<span
-																		className={`font-bold text-xs ${playerColor.textColor}`}
-																	>
-																		{player.first_name?.charAt(0) || "P"}
-																	</span>
-																</div>
-																<div>
-																	<p className="font-medium text-sm">
-																		{player.first_name} {player.last_name}
-																	</p>
-																</div>
+																	<SelectTrigger>
+																		<SelectValue>{rs.player_name}</SelectValue>
+																	</SelectTrigger>
+																	<SelectContent>
+																		{fileterdAvailablePlayers.map((player) => (
+																			<SelectItem
+																				key={player.id}
+																				value={player.id}
+																			>
+																				{player.first_name} {player.last_name}
+																			</SelectItem>
+																		))}
+																	</SelectContent>
+																</Select>
+																<Button
+																	variant="ghost"
+																	onClick={() => removeScore(rs.id)}
+																>
+																	<Trash className="w-4 h-4" />
+																</Button>
 															</div>
 														</td>
 														{rs.round_score_holes.map((hole) => (
@@ -424,7 +358,7 @@ export function CreateRoundPage() {
 																	value={hole.gross_score}
 																	onChange={(e) =>
 																		handleHoleScoreChange(
-																			rs.player_id,
+																			rs.id,
 																			hole.hole_number,
 																			parseInt(e.target.value) || 0,
 																			courseHoles.length * index +
@@ -445,6 +379,14 @@ export function CreateRoundPage() {
 											})}
 										</tbody>
 									</table>
+									<Button
+										variant="outline"
+										className="my-4"
+										onClick={handleAddScore}
+									>
+										<Plus className="w-4 h-4" />
+										Add Score
+									</Button>
 								</div>
 							</CardContent>
 						</Card>

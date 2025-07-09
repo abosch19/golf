@@ -11,6 +11,7 @@ export interface CreateRoundFormData {
 	course_id: string;
 	played_at: string;
 	round_scores: {
+		id: string;
 		player_id: string;
 		gross_score: number;
 		round_score_holes: {
