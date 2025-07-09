@@ -13,6 +13,7 @@ export interface CreateRoundFormData {
 	round_scores: {
 		id: string;
 		player_id: string;
+		player_name: string;
 		gross_score: number;
 		round_score_holes: {
 			hole_number: number;
@@ -27,7 +28,6 @@ export function useCreateRound() {
 
 	return useMutation({
 		mutationFn: async (roundFormData: CreateRoundFormData) => {
-			console.log(roundFormData);
 			const { data: roundData, error: roundError } = await supabase
 				.from("rounds")
 				.insert({
