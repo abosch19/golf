@@ -53,6 +53,10 @@ export function ScoreCard({ score, course }: ScoreCardProps) {
 		);
 	};
 
+	const holesSorted = score.holes.sort((a, b) => a.hole_number - b.hole_number);
+	const firstNineHoles = holesSorted.slice(0, 9);
+	const secondNineHoles = holesSorted.slice(9, 18);
+
 	const playerColor = getPlayerColor(score.player.first_name);
 
 	return (
@@ -98,7 +102,7 @@ export function ScoreCard({ score, course }: ScoreCardProps) {
 
 			{/* Hole-by-hole breakdown */}
 			<div className="grid grid-cols-9 gap-1 mt-3">
-				{score.holes.slice(0, 9).map((hole) => (
+				{firstNineHoles.map((hole) => (
 					<div key={score.id + hole.hole_number} className="text-center">
 						<div className="text-xs text-gray-500">Hole {hole.hole_number}</div>
 						<div className="flex items-center justify-center">
@@ -110,7 +114,7 @@ export function ScoreCard({ score, course }: ScoreCardProps) {
 
 			{score.holes.length > 9 && (
 				<div className="grid grid-cols-9 gap-1 mt-2">
-					{score.holes.slice(9, 18).map((hole) => (
+					{secondNineHoles.map((hole) => (
 						<div key={score.id + hole.hole_number} className="text-center">
 							<div className="text-xs text-gray-500">
 								Hole {hole.hole_number}

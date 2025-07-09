@@ -13,6 +13,10 @@ export function RoundCard({ round }: { round: Round }) {
 		});
 	};
 
+	const scoresSorted = round.round_scores.sort(
+		(a, b) => a.gross_score - b.gross_score,
+	);
+
 	return (
 		<Card
 			key={round.id}
@@ -38,7 +42,7 @@ export function RoundCard({ round }: { round: Round }) {
 
 			<CardContent className="p-6">
 				<div className="grid gap-4">
-					{round.round_scores.map((score) => (
+					{scoresSorted.map((score) => (
 						<ScoreCard key={score.id} score={score} course={round.course} />
 					))}
 				</div>

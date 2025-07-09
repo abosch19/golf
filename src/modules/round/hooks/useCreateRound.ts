@@ -26,6 +26,7 @@ export function useCreateRound() {
 
 	return useMutation({
 		mutationFn: async (roundFormData: CreateRoundFormData) => {
+			console.log(roundFormData);
 			const { data: roundData, error: roundError } = await supabase
 				.from("rounds")
 				.insert({
@@ -34,6 +35,8 @@ export function useCreateRound() {
 				})
 				.select("id")
 				.single();
+
+			if (roundError) throw roundError;
 
 			roundFormData.round_scores.forEach(async (roundScore) => {
 				const { data: roundScoreData, error: roundScoreError } = await supabase
@@ -61,8 +64,6 @@ export function useCreateRound() {
 					if (roundScoreHoleError) throw roundScoreHoleError;
 				});
 			});
-
-			if (roundError) throw roundError;
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["rounds"] });
