@@ -1,4 +1,11 @@
-import { CalendarDays, MapPin, Plus, Trash } from "lucide-react";
+import {
+	CalendarDays,
+	LandPlot,
+	MapPin,
+	Plus,
+	Sparkle,
+	Trash,
+} from "lucide-react";
 import { useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Loading } from "@/components/layouts/Loading";
@@ -20,6 +27,7 @@ import {
 	type CreateRoundFormData,
 	useCreateRound,
 } from "../hooks/useCreateRound";
+import { useCreateRoundAI } from "../hooks/useCreateRoundAI";
 
 const createRoundScore = (
 	playerId: string,
@@ -44,7 +52,11 @@ export function CreateRoundPage() {
 	const { data: availablePlayers, isLoading: playersLoading } =
 		useAvailablePlayers();
 	const { data: courses, isLoading: coursesLoading } = useAvailableCourses();
+	const [isUsingAI, setIsUsingAI] = useState(false);
+	const [previewImage, setPreviewImage] = useState<string | null>(null);
 	const createRoundMutation = useCreateRound();
+	const createRoundAIMutation = useCreateRoundAI();
+	const imageInputRef = useRef<HTMLInputElement>(null);
 	const holesInputRef = useRef<(HTMLInputElement | null)[]>([]);
 
 	const [formData, setFormData] = useState<CreateRoundFormData>({
@@ -125,6 +137,48 @@ export function CreateRoundPage() {
 					: rs,
 			),
 		}));
+	};
+
+	const handleUseAI = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
+		setIsUsingAI(!isUsingAI);
+	};
+
+	const handleSubmitAI = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		const image = imageInputRef.current?.files?.[0];
+
+		if (!image) {
+			alert("Please upload an image");
+			return;
+		}
+
+		await createRoundAIMutation.mutateAsync(
+			{
+				availablePlayers: availablePlayers || [],
+				availableCourses: courses || [],
+				image,
+			},
+			{
+				onSuccess: ({ data }) => {
+					setFormData({
+						...data,
+						played_at: new Date(data.played_at).toISOString().slice(0, 16),
+						round_scores: data.round_scores.map((rs: object) => ({
+							id: Math.random().toString(36).substr(2, 9),
+							...rs,
+						})),
+					});
+					setIsUsingAI(false);
+				},
+				onError: (error) => {
+					console.error("Failed to create round:", error);
+					alert("Failed to create round. Please try again.");
+				},
+			},
+		);
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -274,8 +328,49 @@ export function CreateRoundPage() {
 					{formData.course_id && (
 						<Card>
 							<CardHeader>
-								<CardTitle>Hole-by-Hole Scoring</CardTitle>
+								<CardTitle className="flex items-center justify-between">
+									<div className="flex items-center gap-2">
+										<LandPlot className="w-5 h-5" />
+										Hole-by-Hole Scoring
+									</div>
+									<Button
+										variant="ghost"
+										className="text-xs text-gray-500"
+										onClick={handleUseAI}
+									>
+										<Sparkle className="w-5 h-5" />
+										{isUsingAI ? "Use Manual" : "Use AI"}
+									</Button>
+								</CardTitle>
 							</CardHeader>
+							{isUsingAI && (
+								<CardContent className="flex flex-col gap-4 max-w-2xl mx-auto relative">
+									<Input
+										type="file"
+										accept="image/*"
+										ref={imageInputRef}
+										onChange={(event) => {
+											const file = event.target.files?.[0];
+											if (file) {
+												setPreviewImage(URL.createObjectURL(file));
+											}
+										}}
+										className="w-full h-24 relative"
+									/>
+									{previewImage && (
+										<img src={previewImage} alt="Scorecard" className="" />
+									)}
+									<Button
+										className="my-4"
+										onClick={handleSubmitAI}
+										disabled={createRoundAIMutation.isPending}
+									>
+										{createRoundAIMutation.isPending
+											? "Submitting..."
+											: "Submit picture"}
+									</Button>
+								</CardContent>
+							)}
 							<CardContent>
 								<div className="overflow-x-auto">
 									<table className="w-full border-collapse">
@@ -309,10 +404,18 @@ export function CreateRoundPage() {
 													0,
 												);
 
+												console.log(rs.player_name);
+
 												return (
 													<tr key={rs.id} className="border-b border-gray-100">
 														<td className="p-2">
 															<div className="flex items-center gap-2">
+																<Button
+																	variant="ghost"
+																	onClick={() => removeScore(rs.id)}
+																>
+																	<Trash className="w-4 h-4" />
+																</Button>
 																<Select
 																	onValueChange={(playerId) =>
 																		handlePlayerSelect(rs.id, playerId)
@@ -332,12 +435,6 @@ export function CreateRoundPage() {
 																		))}
 																	</SelectContent>
 																</Select>
-																<Button
-																	variant="ghost"
-																	onClick={() => removeScore(rs.id)}
-																>
-																	<Trash className="w-4 h-4" />
-																</Button>
 															</div>
 														</td>
 														{rs.round_score_holes.map((hole) => (

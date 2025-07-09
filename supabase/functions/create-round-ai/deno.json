@@ -1,0 +1,28 @@
+{
+	"imports": {
+		"@supabase/functions-js": "jsr:@supabase/functions-js@2.1.5"
+	},
+	"compilerOptions": {
+		"allowJs": true,
+		"lib": ["deno.window"],
+		"strict": true
+	},
+	"lint": {
+		"rules": {
+			"tags": ["recommended"]
+		}
+	},
+	"fmt": {
+		"files": {
+			"include": ["**/*.ts", "**/*.js"]
+		},
+		"options": {
+			"useTabs": false,
+			"lineWidth": 80,
+			"indentWidth": 2,
+			"semiColons": true,
+			"singleQuote": false,
+			"proseWrap": "preserve"
+		}
+	}
+}
